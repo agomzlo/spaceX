@@ -1,0 +1,75 @@
+---
+interface Props{
+    id:string;
+    name:string;
+    img:string;
+    date:Date;
+    success:boolean;
+    flightNumber:number;
+    details:string | null;
+}
+
+const {success, flightNumber, details, id, img, name, date} = Astro.props;
+const successMessage = success ? 'Mission was successful' : 'Mission was a failure';
+const verifiedDetails = details || 'No details available';
+---
+
+<a 
+    href=`/launch/${id}`
+    class="flex flex-col rounded-lg border shadow-md bg-gray-800 border-gray-700 
+    hover:scale-105 hover:bg-gray-700 hover:border-gray-500 transition-all"
+>
+    <header class="px-4">
+        <h2 class="my-2 text-2xl font-bold tracking-tight text-white">
+            {name} | Flight #{flightNumber}
+        </h2>
+    </header>
+    <picture class="flex justify-center p-4">
+        <img src={img} alt={`Path for launch ${id}`} class="object-contain"/>
+    </picture>
+
+    <section class="p-4 flex-grow">
+        <span 
+            class:list={['text-xs font-semibold px-2.5 py-1.5 rounded',
+            {
+            'bg-green-900 text-white': success,
+            'bg-red-900 text-white': !success
+            }
+            ]}
+        >
+            {successMessage}
+        </span>
+
+        <h2 class="my-2 text-2xl font-bold tracking-tight text-white">
+            {date.toLocaleDateString('en', {year: 'numeric', month: 'long', day: 'numeric'})}
+        </h2>
+
+        <p class="mb-4 font-light text-gray-400">
+            {verifiedDetails?.length > 100 ? verifiedDetails.slice(0, 100) + '...' : verifiedDetails}
+        </p>
+    </se>
+</a>
+
+<style>
+    a {
+      view-timeline-name: --card;
+      view-timeline-axis: block;
+  
+      animation-timeline: --card;
+      animation-name: show;
+
+      animation-range: entry 25% cover 40%;
+      animation-fill-mode: both;
+    }
+  
+    @keyframes show {
+        from {
+            scale: 75%;
+            opacity: 0;
+        }
+        to {
+            scale: 100%;
+            opacity: 1;
+        }
+    }
+  </style>

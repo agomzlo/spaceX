@@ -1,0 +1,32 @@
+---
+import HeaderButton from "./HeaderButton.astro";
+import Rocket from "./icons/Rocket.astro";
+import Clock from "./icons/Clock.astro";
+import Info from "./icons/Info.astro";
+---
+
+<header class="py-8 px-4 mx-auto max-w-xl lg:py-16 lg:px-6">
+    <div class="mx-auto text-center mb-8 lg:mb-16">
+        <h2 class="mb-4 text-5xl tracking-tight font-extrabold text-white">
+            <span class="text-blue-500">SpaceX</span> Launches 🚀
+        </h2>
+        <p class="font-light text-gray-500 sm:text-xl dark:text-gray-400">
+            All the information you need about SpaceX launches.
+        </p>
+    </div>
+
+    <nav class="flex flex-col items-center justify-between w-full text-center md:flex-row">
+        <HeaderButton link="/">
+            <Rocket slot="icon" class="w-10 h-10"/>
+            Latest launches
+        </HeaderButton>
+        <HeaderButton link="/about">
+            <Info slot="icon" class="w-10 h-10"/>
+            About the project
+        </HeaderButton>
+        <HeaderButton link="/">
+            <Clock slot="icon" class="w-10 h-10"/>
+            Previous launches
+        </HeaderButton>
+    </nav>
+</header>

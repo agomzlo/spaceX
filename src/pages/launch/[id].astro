@@ -1,0 +1,45 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { getLaunchBy } from "../../services/spacex";
+
+export const prerender = false;
+
+const { id } = Astro.params;
+
+let launch
+if (id) {
+    launch = await getLaunchBy({ id });
+}
+
+const launchDate = new Date(launch?.date_utc ?? "").toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+});
+const successMessage = launch?.success ? 'Mission was successful' : 'Mission was a failure';
+const verifiedDetails = launch?.details || 'No details available';
+---
+<Layout title={`Launch ${id}`}>
+    <section 
+        class="w-full flex flex-col md:grid md:grid-cols-3 border border-gray-500 
+        bg-gray-800 rounded-lg justify-center p-6 shadow-lg shadow-blue-800/30"
+    >
+        <div class="flex justify-center">
+            <img class="object-contain" src={launch?.links.patch.small} alt={launch?.name}>
+        </div>
+        <div class="col-span-2 mt-2 md:mt-0">
+            <h1 class="text-3xl lg:text-5xl font-bold">{launch?.name}</h1>
+            <div class="p-2 text-lg md:text-xl">
+                <p><span class="font-bold">Launch Date:</span> {launchDate}</p>
+                <p><span class="font-bold">Flight Number:</span> {launch?.flight_number}</p>
+                <p><span class="font-bold">Rocket:</span> {launch?.rocket}</p>
+                <p><span class="font-bold">Reused Fairings:</span> {launch?.fairings?.reused ? 'True' : 'False'}</p>
+                <p><span class="font-bold">Recovered Fairings:</span> {launch?.fairings?.reused ? 'True' : 'False'}</p>
+                <p><span class="font-bold">State:</span> {successMessage}</p>
+                <p><span class="font-bold">Details:</span> {verifiedDetails}</p>
+                <p><span class="font-bold">Webcast:</span> <a href={launch?.links.webcast} target="_blank" class="text-blue-500 underline hover:text-purple-500">Click to watch the webcast</a></p>
+                <p><span class="font-bold">Article:</span> <a href={launch?.links.article} target="_blank" class="text-blue-500 underline hover:text-purple-500">Click to read the article</a></p>
+            </div>
+        </div>
+    </section>
+</Layout>
